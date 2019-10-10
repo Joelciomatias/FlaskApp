@@ -31,8 +31,8 @@ hoteis = [
     'cidade':'Curitiba'
     },
     {
-    'hotel_id':'alpha',tasks
-    'nome':'Alpha Hoteltasks,
+    'hotel_id':'alpha',
+    'nome':'Alpha Hoteltasks',
     'estrelas':4.3,
     'diaria':420.34,
     'cidade':'Curitiba'

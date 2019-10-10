@@ -19,3 +19,4 @@ def test_py(iterations):
         iteration += 1
     print('sum',total)
     del array
+    return total

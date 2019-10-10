@@ -1,16 +1,22 @@
 ## FlaskApp | celery | SqlAlchemy
 
 ### Criar ambiente virtual
-> python -m venv myenv
+> python3 -m venv myenv
 ### Ativar env
 > source myenv/bin/activate
 ### Instalar pacotes
 > pip install -r requirements.txt
 ### Subir app
-> python ./common/app/views.py
+> cd common/app
+> python views.py
+### subir celery worker
+> cd common/app
+> > cd common/app
+> python views.py
 
-#### Rodar o celery worker (arquivo tasks)
-> celery -A ./common/celery_tasks worker --loglevel=info
+#### Rodar o celery worker independete (arquivo tasks)
+> cd common/app
+> celery -A tasks worker --loglevel=info
 
 > python
 

@@ -161,8 +161,6 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-#vscode
-.vscode/
-
 #cache
 app/__pycache__/*
+.history
