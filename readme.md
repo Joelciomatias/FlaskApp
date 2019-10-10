@@ -7,10 +7,10 @@
 ### Instalar pacotes
 > pip install -r requirements.txt
 ### Subir app
-> python ./app/views.py
+> python ./common/app/views.py
 
 #### Rodar o celery worker (arquivo tasks)
-> celery -A tasks worker --loglevel=info
+> celery -A ./common/celery_tasks worker --loglevel=info
 
 > python
 

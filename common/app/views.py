@@ -14,7 +14,7 @@ db = SQLAlchemy(app)
 class Results(db.Model):
     id = db.Column('id', db.Integer, primary_key=True)
     data = db.Column('data',db.String(50))
-
+print(soma_args(3,4,4,4,4))
 @app.route('/')
 def hello_world():
     return 'Hello, World!'
