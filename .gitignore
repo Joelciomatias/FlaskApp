@@ -164,3 +164,4 @@ dmypy.json
 #cache
 app/__pycache__/*
 .history
+banco.db

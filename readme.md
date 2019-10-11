@@ -11,8 +11,7 @@
 > python views.py
 ### subir celery worker
 > cd common/app
-> > cd common/app
-> python views.py
+> celery -A views.celery worker --loglevel=info
 
 #### Rodar o celery worker independete (arquivo tasks)
 > cd common/app

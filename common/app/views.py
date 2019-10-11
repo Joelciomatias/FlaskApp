@@ -3,9 +3,12 @@ from flask import Flask
 from flask_celery import make_celery
 from flask_sqlalchemy import SQLAlchemy
 from random import choice
+from celery.task.control import inspect
 from test_numpy import test_py
+from flask_cors import CORS
 
 app = Flask(__name__)
+cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 app.config['CELERY_BROKER_URL'] = 'amqp://localhost//'
 app.config['CELERY_RESULT_BACKEND'] = 'db+mysql+pymysql://root:123456@localhost:3306/mydb'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:123456@localhost:3306/mydb'
@@ -22,7 +25,7 @@ class TestPython(db.Model):
     sum = db.Column('sum',db.Float())
     start = db.Column('start',db.DateTime())
     end = db.Column('end',db.DateTime())
-    interations = db.Column('interations', db.Integer)
+    iterations = db.Column('iterations', db.Integer)
 
 @app.route('/')
 def hello_world():
@@ -46,12 +49,12 @@ def test_python_task(iterations=1):
     return 'I sent a async task test python with %i interation(s)!' % iterations, 200
 
 @celery.task(name='views.test_python')
-def test_python(interations):
+def test_python(iterations):
     start = datetime.datetime.now()
-    result = test_py(interations)
+    result = test_py(iterations)
     # print(int(result),type(result))
     end = datetime.datetime.now()
-    db.session.add(TestPython(sum=int(result),start=start,end=end,interations=interations))
+    db.session.add(TestPython(sum=int(result),start=start,end=end,iterations=iterations))
     db.session.commit()
     print('Iniciado em: ',start,' \n Terminou em: ',end)
     return 'ok',200
@@ -69,6 +72,30 @@ def insert():
         db.session.add(result)
     db.session.commit()
     return 'Foi!!!'
+
+@app.route('/queues-a')
+def inspectQueues():
+    i = inspect()
+    return i.active(),200
+
+@app.route('/finished')
+def get_finished_data():
+    finished_data = TestPython.query.all()
+    # our_user = session.query(User).filter_by(name='et').order_?by(User.id.desc())[1:3]
+    # db.session.commit()
+    print(type(finished_data))
+    result = []
+    for data in finished_data:
+        result.append({
+            'id':data.id,
+            'sum':data.sum,
+            'start':data.start,
+            'end':data.end,
+            'iterations':data.iterations,
+        })
+    _result = {}
+    _result['result'] = result
+    return _result,200
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port='5000', debug=True)
