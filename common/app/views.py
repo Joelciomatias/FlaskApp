@@ -8,7 +8,8 @@ from test_numpy import test_py
 from flask_cors import CORS
 
 app = Flask(__name__)
-cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
+# app.config['CORS_HEADERS'] = 'Content-Type'
+cors = CORS(app, resources={r"/*/": {"origins": "*"}})
 app.config['CELERY_BROKER_URL'] = 'amqp://localhost//'
 app.config['CELERY_RESULT_BACKEND'] = 'db+mysql+pymysql://root:123456@localhost:3306/mydb'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:123456@localhost:3306/mydb'
@@ -76,7 +77,9 @@ def insert():
 @app.route('/queues-a')
 def inspectQueues():
     i = inspect()
-    return i.active(),200
+    active = {}
+    active['active'] = i.active()
+    return active,200
 
 @app.route('/finished')
 def get_finished_data():

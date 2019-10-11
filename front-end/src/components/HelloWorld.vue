@@ -1,7 +1,8 @@
 /* eslint-disable */
 <template>
   <div class="hello">
-    <div>
+<h2>Test python results</h2>
+  <div>
       <b-table striped hover :items="items"></b-table>
     </div>
   </div>
@@ -9,27 +10,40 @@
 
 <script>
 import axios from 'axios'
-// http://localhost:5000/finished
-axios.get('http://localhost:5000/finished').then((response) => {
-  console.log(response.data)
-}).catch((error) =>{
-  console.error(error);
-})
-
-
 
 export default {
   name: 'HelloWorld',
   data() {
       return {
-        items: [
-          { age: 40, first_name: 'Dickerson', last_name: 'Macdonald' },
-          { age: 21, first_name: 'Larsen', last_name: 'Shaw' },
-          { age: 89, first_name: 'Geneva', last_name: 'Wilson' },
-          { age: 38, first_name: 'Jami', last_name: 'Carney' }
-        ]
+        items: []       
       }
-    }
+  },
+  beforeMount(){
+    this.getData()
+ },
+ methods:{
+
+   getData() {
+     axios.get(`http://localhost:5000/finished`)
+    .then(response => {
+      // JSON responses are automatically parsed.
+      let result = []
+      response.data.result.forEach(element => {
+        result.push({
+          'Id':element.id,
+          'Interations':element.iterations,
+          'Sum':element.sum,
+          'Start':element.start,
+          'End':element.end,
+        })
+      });
+      this.items = result
+    })
+    .catch(e => {
+      this.errors.push(e)
+    })
+  }
+ }
 }
 </script>
 

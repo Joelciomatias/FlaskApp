@@ -1,0 +1,26 @@
+version: '2'
+
+services:
+  mysql-local:
+    image: mysql:5.7
+    container_name: mysql-local
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+    ports:
+      - 3306:3306
+    networks:
+      - db_sharing
+
+  rabbit-local:
+    image: rabbitmq:3-management
+    container_name: rabbit-local
+    hostname: localhost
+    ports:
+      - 15672:15672
+      - 5672:5672
+      
+networks:
+  db_sharing:
+
+volumes:
+  mongodb_data:
