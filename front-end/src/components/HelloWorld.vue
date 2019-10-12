@@ -11,8 +11,23 @@
 <script>
 import axios from 'axios'
 
+import io from 'socket.io-client';
+
+
+this.$socket.subscribe('join_room', (data) => {
+    this.msg = data.message;
+});
+
 export default {
   name: 'HelloWorld',
+  sockets: {
+        connect: function () {
+            console.log('socket connected')
+        },
+        customEmit: function (data) {
+            console.log('this method was fired by the socket server. eg: io.emit("customEmit", data)')
+        }
+    },
   data() {
       return {
         items: []       
@@ -21,8 +36,14 @@ export default {
   beforeMount(){
     this.getData()
  },
+ mounted(){
+   this.$socket.emit('create', {})
+ },
  methods:{
-
+ clickButton: function (data) {
+            // $socket is socket.io-client instance
+            this.$socket.emit('emit_method', data)
+        },
    getData() {
      axios.get(`http://localhost:5000/finished`)
     .then(response => {

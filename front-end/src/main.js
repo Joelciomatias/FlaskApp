@@ -5,12 +5,24 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+//import store from './store'
+
+import VueSocketIO from 'vue-socket.io'
  
 Vue.config.productionTip = false
-Vue.use(VueAxios, axios)
 Vue.use(BootstrapVue)
 Vue.use(VueAxios, axios)    
+Vue.use(new VueSocketIO({
+    debug: true,
+    connection: 'http://localhost:5000',
+    vuex: {
+        actionPrefix: 'SOCKET_',
+        mutationPrefix: 'SOCKET_'
+    },
+    options: { } //Optional options
+}))
 
 new Vue({
-  render: h => h(App),
+    //router
+    render: h => h(App)
 }).$mount('#app')

@@ -6,16 +6,28 @@ from random import choice
 from celery.task.control import inspect
 from test_numpy import test_py
 from flask_cors import CORS
+from flask_socketio import SocketIO, join_room, emit
 
+# initialize Flask
 app = Flask(__name__)
-# app.config['CORS_HEADERS'] = 'Content-Type'
 cors = CORS(app, resources={r"/*/": {"origins": "*"}})
+socketio = SocketIO(app,cors_allowed_origins="*")
+ROOMS = {} # dict to track active rooms
+
+# app.config['CORS_HEADERS'] = 'Content-Type'
 app.config['CELERY_BROKER_URL'] = 'amqp://localhost//'
 app.config['CELERY_RESULT_BACKEND'] = 'db+mysql+pymysql://root:123456@localhost:3306/mydb'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:123456@localhost:3306/mydb'
 celery = make_celery(app)
 
 db = SQLAlchemy(app)
+
+@socketio.on('create')
+def on_create(data):
+    """Create a game lobby"""
+    print('emit created')
+    emit('join_room', {'room':3})
+
 
 class Results(db.Model):
     id = db.Column('id', db.Integer, primary_key=True)
@@ -46,6 +58,7 @@ def reverse(string):
 @app.route('/test-python/<int:iterations>')
 def test_python_task(iterations=1):
     print(iterations,' iteration(s)')
+    emit('join_room', {'room': 0})
     test_python.delay(iterations)
     return 'I sent a async task test python with %i interation(s)!' % iterations, 200
 
@@ -101,4 +114,4 @@ def get_finished_data():
     return _result,200
 
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port='5000', debug=True)
+    socketio.run(app,host='127.0.0.1', port='5000', debug=True)
