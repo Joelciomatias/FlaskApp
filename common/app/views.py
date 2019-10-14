@@ -28,13 +28,15 @@ def roll6():
     result = {}
     _active = i.active()
     reserved = i.reserved()
-    for key in _active:
-        if len(_active[key]) >= 0:
-            result['active'] = _active[key]
-            for _key in reserved:
-                if len(_active[key]) >= 0:
-                    result['reserved'] = reserved[key]       
-            socketio.emit('active', result)
+    if _active:
+        for key in _active:
+            if len(_active[key]) >= 0:
+                result['active'] = _active[key]
+                if reserved:
+                    for _key in reserved:
+                        if len(_active[key]) >= 0:
+                            result['reserved'] = reserved[key]       
+                    socketio.emit('active', result)
             
 
 # set up the timer
