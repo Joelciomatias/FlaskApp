@@ -7,6 +7,38 @@ from celery.task.control import inspect
 from test_numpy import test_py
 from flask_cors import CORS
 from flask_socketio import SocketIO, join_room, emit
+import threading
+import random
+
+
+# code from http://stackoverflow.com/a/14035296/4592067
+def set_interval(func, sec):
+    def func_wrapper():
+        set_interval(func, sec)
+        func()
+    t = threading.Timer(sec, func_wrapper)
+    t.start()
+    return t
+
+# roll a die every 3 seconds
+# cancel the timer once we roll a "6"
+def roll6():
+    i = inspect()
+    #print(i)
+    result = {}
+    _active = i.active()
+    reserved = i.reserved()
+    for key in _active:
+        if len(_active[key]) >= 0:
+            result['active'] = _active[key]
+            for _key in reserved:
+                if len(_active[key]) >= 0:
+                    result['reserved'] = reserved[key]       
+            socketio.emit('active', result)
+            
+
+# set up the timer
+timer = set_interval(roll6, 1)
 
 # initialize Flask
 app = Flask(__name__)
@@ -25,8 +57,8 @@ db = SQLAlchemy(app)
 @socketio.on('create')
 def on_create(data):
     """Create a game lobby"""
-    print('emit created')
-    emit('join_room', {'room':3})
+    print('*** create emited from front-end client!!!!')
+#    emit('join_room', {'room':3})
 
 
 class Results(db.Model):
@@ -42,6 +74,7 @@ class TestPython(db.Model):
 
 @app.route('/')
 def hello_world():
+    socketio.emit('join_room', {'room':3})
     return 'Hello, World!'
 
 @app.route('/process/<name>')
@@ -58,7 +91,7 @@ def reverse(string):
 @app.route('/test-python/<int:iterations>')
 def test_python_task(iterations=1):
     print(iterations,' iteration(s)')
-    emit('join_room', {'room': 0})
+    #emit('join_room', {'room': 0})
     test_python.delay(iterations)
     return 'I sent a async task test python with %i interation(s)!' % iterations, 200
 
