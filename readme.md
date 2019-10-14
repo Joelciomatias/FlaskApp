@@ -1,11 +1,17 @@
 ## FlaskApp | celery | SqlAlchemy
 
 ### Criar ambiente virtual | Ativar env | Instalar pacotes - Backend
-```python3 -m venv myenv &&
+
+```bash
+python3 -m venv myenv &&
 source myenv/bin/activate &&
-pip install -r requirements.txt```
+pip install -r requirements.txt
+```
 ### instalar fron-end
-```cd front-end/ && npm i```
+
+```bash
+cd front-end/ && npm i
+```
 
 requisitos front-end:
 npm 6.12.0
@@ -15,26 +21,50 @@ npm install -g @vue/cli
 npm install -g @vue/cli-service-global
 
 ### Subir api
-```cd common/app && python views.py && echo'api no ar' ```
+```bash
+cd common/app && python views.py && echo'api no ar' 
+```
 ### subir celery worker
-```cd common/app && celery -A views.celery worker --loglevel=info```
+```bash
+cd common/app && celery -A views.celery worker --loglevel=info
+```
 ### subir o front-end a app
-```cd front-end/ && npm run serve```
+```bash
+cd front-end/ && npm run serve
+```
 
 #### Rodar o celery worker independete (arquivo tasks)
-```cd common/app```
-```celery -A tasks worker --loglevel=info```
+```bash
+cd common/app
+```
+```bash
+celery -A tasks worker --loglevel=info
+```
 
-```python```
+```bash
+python
+```
 
-```from tasks import *```
+```bash
+from tasks import *
+```
 
-```reverse.delay('mystring')```
+```bash
+reverse.delay('mystring')
+```
 
-```result = reverse.delay('mystring')```
+```bash
+result = reverse.delay('mystring')
+```
 
-```result.status```
+```bash
+result.status
+```
 
-```result.get()```
+```bash
+result.get()
+```
 
-```result.ready()```
+```bash
+result.ready()
+```
