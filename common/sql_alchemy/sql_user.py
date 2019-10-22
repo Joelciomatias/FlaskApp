@@ -4,7 +4,7 @@ from sqlalchemy import Column, Integer, String,create_engine,ForeignKey
 from sqlalchemy.orm import sessionmaker,relationship
 
 Base = declarative_base()
-engine = create_engine('mysql+pymysql://root:123456@localhost:3306/mydb',echo=True)
+engine = create_engine('mysql+pymysql://root:123456@localhost:3306/mydatabase',echo=True)
 Session = sessionmaker(bind=engine)
 session = Session()
 

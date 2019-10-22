@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String
 # engine = create_engine('sqlite:///college.db', echo = True)
-engine = create_engine('mysql+pymysql://root:123456@localhost:3306/mydb',echo=False)
+engine = create_engine('mysql+pymysql://root:123456@localhost:3306/mydatabase',echo=False)
 
 meta = MetaData()
 
