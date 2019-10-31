@@ -1,3 +1,4 @@
+
 import datetime
 from flask import Flask
 from flask_celery import make_celery
@@ -55,10 +56,7 @@ def test_python_task(iterations=1):
 def test_python(iterations):
     start = datetime.datetime.now()
     result = test_py(iterations)
-    # print(int(result),type(result))
     end = datetime.datetime.now()
-    timer = set_interval(checkCelery, 1)
-    timer = set_interval(checkCelery, 1)
     db.session.add(TestPython(sum=int(result),start=start,end=end,iterations=iterations))
     db.session.commit()
     print('Iniciado em: ',start,' \n Terminou em: ',end)
@@ -111,7 +109,7 @@ def checkCelery():
                             result['reserved'] = reserved[key]       
                     socketio.emit('active', result)
 # set up the timer
-timer = set_interval(checkCelery, 1)
+set_interval(checkCelery, 1)
 
 if __name__ == '__main__':
     socketio.run(app,host='127.0.0.1', port='5000', debug=True)

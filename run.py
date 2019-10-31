@@ -1,6 +1,3 @@
-from app import factory
-import app
-
-if __name__ == "__main__":
-    app = factory.create_app(celery=app.celery)
-    app.run()
+import os 
+os.system('python app/views.py')
+os.system('cd app && celery -A views.celery worker --loglevel=info')

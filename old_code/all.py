@@ -5,7 +5,6 @@ from .tasks import make_file
 bp = Blueprint("all", __name__)
 from app.models.testpython import TestPython
 
-
 @bp.route("/")
 def index():
     return "Hello!"
