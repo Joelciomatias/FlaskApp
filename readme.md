@@ -7,6 +7,18 @@ python3 -m venv myenv &&
 source myenv/bin/activate &&
 pip install -r requirements.txt
 ```
+### database 
+
+> criar a database mydatabase no mysql
+
+Rodar o alembic:
+
+
+```bash
+alembic upgrade head
+```
+
+
 ### instalar fron-end - 
 
 ```bash
